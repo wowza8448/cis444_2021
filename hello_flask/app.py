@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request
 
 app = Flask(__name__)
 
@@ -24,6 +24,15 @@ def buy():
 @app.route('/hello') #endpoint
 def hello():
     return render_template('hello.html',img_url=IMGS_URL[CUR_ENV] ) 
+
+@app.route('/back',  methods=['GET']) #endpoint
+def back():
+    return render_template('backatu.html',input_from_browser=request.args.get('usay', default = "nothing", type = str) )
+
+@app.route('/backp',  methods=['POST']) #endpoint
+def backp():
+    return render_template('backatu.html',input_from_browser= str(request.form) )
+
 
 app.run(host='0.0.0.0', port=80)
 
