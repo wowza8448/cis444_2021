@@ -1,5 +1,7 @@
 from flask import Flask,render_template,request
 
+import datetime
+
 app = Flask(__name__)
 
 
@@ -32,6 +34,12 @@ def back():
 @app.route('/backp',  methods=['POST']) #endpoint
 def backp():
     return render_template('backatu.html',input_from_browser= str(request.form) )
+
+
+#Assigment 2
+@app.route('/ss1') #endpoint
+def ss1():
+    return render_template('server_time.html', server_time= str(datetime.datetime.now()) )
 
 
 app.run(host='0.0.0.0', port=80)
