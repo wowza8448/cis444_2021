@@ -19,12 +19,11 @@
     
         <script> 
 		setInterval(function(){
-			$.getJSON( "/getTime",  { "username":"hello", "password":"1234"} ,  function( json ) {
-			$('#mydiv').html(JSON.stringify(json));
-		}).fail(function( jqxhr, textStatus, error ) {
-    				var err = textStatus + ", " + error;
-    			console.log( "Request Failed: " + err );
-		});
+			$.post("/auth", { "username":"hello", "password":"1234"}, 
+				function(data, textStatus) {
+					console.log(data);
+					$('#mydiv').html(data.data['password']);
+				}, "json");
 		}, 500);
 
 

@@ -36,6 +36,12 @@ def back():
 def backp():
     return render_template('backatu.html',input_from_browser= str(request.form) )
 
+@app.route('/auth',  methods=['POST']) #endpoint
+def auth():
+        #print(request.form['username'])
+        return json_response(data=request.form)
+
+
 
 #Assigment 2
 @app.route('/ss1') #endpoint
@@ -44,7 +50,7 @@ def ss1():
 
 @app.route('/getTime') #endpoint
 def get_time():
-    return json_response(data={"hello":"cary",
+    return json_response(data={"password" : request.args.get('password'),
                                 "class" : "cis44",
                                 "serverTime":str(datetime.datetime.now())
                             }
