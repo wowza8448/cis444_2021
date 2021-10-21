@@ -33,7 +33,7 @@ def back():
 
 @app.route('/backp',  methods=['POST']) #endpoint
 def backp():
-    return render_template('backatu.html',input_from_browser= str(request.form) )
+    return render_template('backatu.html',username = str(request.form['username']) )
 
 
 #Assigment 2
