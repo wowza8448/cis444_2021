@@ -1,9 +1,14 @@
 from flask import Flask,render_template,request
+from flask_json import FlaskJSON, JsonError, json_response, as_json
 
+import jwt
 import datetime
 import bcrypt
 
+from db_con import get_db_instance, get_db
+
 app = Flask(__name__)
+
 
 
 USER_PASSWORDS = { "cjardin": "strong password"}
@@ -36,6 +41,15 @@ def back():
 def backp():
     return render_template('backatu.html',username = str(request.form['username']) )
 
+
+#Assignment 3
+@app.route('/getUser', methods =["GET", "POST"])
+def getUser():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        return "Welcome " + username
+    return render_template("first_form.html")
 
 #Assigment 2
 @app.route('/ss1') #endpoint
