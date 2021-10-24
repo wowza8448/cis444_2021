@@ -9,7 +9,7 @@ from db_con import get_db_instance, get_db
 
 app = Flask(__name__)
 
-
+JWT_SECRET = None
 
 
 USER_PASSWORDS = { "cjardin": "strong password"}
@@ -45,6 +45,9 @@ def backp():
 
 
 #Assignment 3
+
+app.config['SECRET_KEY'] = 'supersecretkey'
+
 @app.route('/getUser', methods =["GET", "POST"])
 def getUser():
     if request.method == "POST":
@@ -58,12 +61,17 @@ def addUser():
     if request.method == "POST":
         cur = global_db_con.cursor()
         username1 = request.form.get("username")
-        password1 = request.form.get("password")
+        password = request.form.get("password")
+        payload = list(password)
+        password1 = jwt.encode({'password': password}, app.config['SECRET_KEY'])
         sqlInsert = """INSERT INTO users(username, password) values(%s, %s);"""
         cur.execute(sqlInsert,(username1, password1))
         global_db_con.commit()
-        return "User " + username1 + " created"
+        print("User created")
+        return "User " + username1 + " created!"
     return render_template("second_form.html")
+
+
 
 #Assigment 2
 @app.route('/ss1') #endpoint
