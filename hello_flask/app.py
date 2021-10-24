@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 
 
+
 USER_PASSWORDS = { "cjardin": "strong password"}
 
 IMGS_URL = {
@@ -20,6 +21,7 @@ IMGS_URL = {
             }
 
 CUR_ENV = "PRD"
+global_db_con = get_db()
 
 @app.route('/') #endpoint
 def index():
@@ -50,6 +52,18 @@ def getUser():
         password = request.form.get("password")
         return "Welcome " + username
     return render_template("first_form.html")
+
+@app.route('/addUser', methods = ["GET", "POST"])
+def addUser():
+    if request.method == "POST":
+        cur = global_db_con.cursor()
+        username1 = request.form.get("username")
+        password1 = request.form.get("password")
+        sqlInsert = """INSERT INTO users(username, password) values(%s, %s);"""
+        cur.execute(sqlInsert,(username1, password1))
+        global_db_con.commit()
+        return "User " + username1 + " created"
+    return render_template("second_form.html")
 
 #Assigment 2
 @app.route('/ss1') #endpoint
