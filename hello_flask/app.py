@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request, redirect
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 
 import jwt
@@ -62,11 +62,16 @@ def getUser():
         else:
             hash = match[1].encode('utf-8')
             new = bcrypt.checkpw(bytes(password, 'utf-8'), hash)
-            if True:
-                return "Login accepted"
+            if new == True:
+                return redirect('/books')
             else:
                 return "Invalid login"
     return render_template("first_form.html")
+
+
+@app.route('/books')
+def home():
+    return "Your books are here!"
 
 @app.route('/addUser', methods = ["GET", "POST"])
 def addUser():
