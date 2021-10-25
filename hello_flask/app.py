@@ -28,9 +28,7 @@ global_db_con = get_db()
 def index():
     return 'Web App with Python Caprice!' + USER_PASSWORDS['cjardin']
 
-@app.route('/buy') #endpoint
-def buy():
-    return 'Buy'
+
 
 @app.route('/hello') #endpoint
 def hello():
@@ -53,7 +51,6 @@ app.config['SECRET_KEY'] = 'supersecretkey'
 def books():
     token = session['token']
     isValid = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-    print(isValid)
     timeCheck = datetime.timedelta(minutes=30)
     if isValid['username'] != None:
         return redirect('/static/books.html')
@@ -87,6 +84,23 @@ def JWT_Token(user):
     token = jwt.encode({'username': user, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
     return token
 
+@app.route('/buy', methods = ["GET", "POST"])
+def buy():
+    if request.method == "POST":    
+        newBook = ""
+        cur = global_db_con.cursor()
+        if request.form.get('horton'):
+            newBook = "horton"
+        elif request.form.get('grinch'):
+            newBook = "the grinch"
+        sqlInsert = """INSERT INTO booksOwned(username, book) values(%s, %s);"""
+        token = session['token']
+        jwt_key = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        username = jwt_key['username']
+        print(username)
+        cur.execute(sqlInsert, (username, book))
+
+        return "book purchased"
 
 @app.route('/addUser', methods = ["GET", "POST"])
 def addUser():
@@ -96,7 +110,6 @@ def addUser():
         password = request.form.get("password")
         password = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
         password = password.decode('utf-8')
-        print(password)
         sqlInsert = """INSERT INTO users(username, password) values(%s, %s);"""
         cur.execute(sqlInsert,(username1, password))
         global_db_con.commit()
