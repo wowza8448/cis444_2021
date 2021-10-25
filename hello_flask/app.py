@@ -1,5 +1,6 @@
-from flask import Flask,render_template,request, redirect
+from flask import Flask,render_template,request, redirect, url_for, session
 from flask_json import FlaskJSON, JsonError, json_response, as_json
+from functools import wraps
 
 import jwt
 import datetime
@@ -48,6 +49,17 @@ def backp():
 
 app.config['SECRET_KEY'] = 'supersecretkey'
 
+@app.route('/getBooks', methods = ["GET", "POST"])
+def books():
+    token = session['token']
+    isValid = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+    print(isValid)
+    timeCheck = datetime.timedelta(minutes=30)
+    if isValid['username'] != None:
+        return redirect('/static/books.html')
+    else:
+        return "Invalid token"
+    
 
 @app.route('/getUser', methods =["GET", "POST"])
 def getUser():
@@ -63,15 +75,18 @@ def getUser():
             hash = match[1].encode('utf-8')
             new = bcrypt.checkpw(bytes(password, 'utf-8'), hash)
             if new == True:
-                return redirect('/books')
+                token = JWT_Token(username)
+                session['token'] = token
+                return redirect('/getBooks')
             else:
                 return "Invalid login"
-    return render_template("first_form.html")
+    return "Error"
 
+def JWT_Token(user):
+    payload = list(user)
+    token = jwt.encode({'username': user, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+    return token
 
-@app.route('/books')
-def home():
-    return "Your books are here!"
 
 @app.route('/addUser', methods = ["GET", "POST"])
 def addUser():
@@ -79,8 +94,6 @@ def addUser():
         cur = global_db_con.cursor()
         username1 = request.form.get("username")
         password = request.form.get("password")
-       # payload = list(password)
-       # password1 = jwt.encode({'password': password}, app.config['SECRET_KEY'])
         password = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
         password = password.decode('utf-8')
         print(password)
@@ -89,7 +102,7 @@ def addUser():
         global_db_con.commit()
         print("User created")
         return "User " + username1 + " created!"
-    return render_template("second_form.html")
+    return "Something went wrong"
 
 
 #Assigment 2
