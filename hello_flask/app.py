@@ -1,6 +1,8 @@
-from flask import Flask,render_template,request, redirect, url_for, session
+from flask import Flask,render_template,request, redirect, url_for, session, jsonify
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 from functools import wraps
+
+
 
 import jwt
 import datetime
@@ -50,12 +52,31 @@ app.config['SECRET_KEY'] = 'supersecretkey'
 @app.route('/getBooks', methods = ["GET", "POST"])
 def books():
     token = session['token']
-    isValid = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-    timeCheck = datetime.timedelta(minutes=30)
+    isValid = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     if isValid['username'] != None:
         return redirect('/static/books.html')
     else:
-        return "Invalid token"
+        return redirect('/static/first_form.html')
+
+
+
+
+@app.route('/myBooks', methods = ["GET", "POST"])
+def myBooks():
+    cur = global_db_con.cursor()
+    token = session['token']
+    getUser = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+    username = getUser['username']
+    sqlExecute = "SELECT * FROM booksOwned WHERE username = username"
+    cur.execute(sqlExecute)
+    rows = cur.fetchall()
+    if rows == None:
+        return "You don't own any books"
+    else:
+        lst = []
+        for row in rows:
+            lst.append(row[1])
+        return jsonify(str(lst))
     
 
 @app.route('/getUser', methods =["GET", "POST"])
@@ -86,7 +107,10 @@ def JWT_Token(user):
 
 @app.route('/buy', methods = ["GET", "POST"])
 def buy():
-    if request.method == "POST":    
+    token = session['token']
+    jwt_key = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    username = jwt_key['username']
+    if username != None:    
         newBook = ""
         cur = global_db_con.cursor()
         if request.form.get('horton'):
@@ -94,13 +118,13 @@ def buy():
         elif request.form.get('grinch'):
             newBook = "the grinch"
         sqlInsert = """INSERT INTO booksOwned(username, book) values(%s, %s);"""
-        token = session['token']
-        jwt_key = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-        username = jwt_key['username']
-        print(username)
-        cur.execute(sqlInsert, (username, book))
+        print(newBook)
+        cur.execute(sqlInsert, (username, newBook))
+        global_db_con.commit()
+        return "Success"
+    else:
+        return redirect("/static/first_form.html")
 
-        return "book purchased"
 
 @app.route('/addUser', methods = ["GET", "POST"])
 def addUser():
