@@ -10,7 +10,7 @@ import traceback
 
 from db_con import get_db_instance, get_db
 
-from tools.get_aws_secrets import get_secrets
+
 from tools.token_required import token_required
 
 
@@ -31,8 +31,9 @@ def init_new_env():
         g.db = get_db()
 
     if DEBUG == False:
+        from tools.get_aws_secrets import get_secrets
         if 'secrets' not in g:
-        g.secrets = get_secrets()
+            g.secrets = get_secrets()
     else:
         g.secrets = {"JWT": "KxQ(S#@>\"5=m$#58SgzD,+H+a73*pzKH,g5_"}
 
