@@ -11,12 +11,12 @@ if NO_AWS:
     from botocore.exceptions import ClientError
     import boto3
 
-SECRET_CACHE  = {}
+SECRET_CACHE = {}
 
 def get_secrets():
     global SECRET_CACHE
     if NO_AWS:
-        return {"JWT": "KxQ(S#@>\"5=m$#58Sgzd,+H+a73*pzKH,g5_"}
+        return {"JWT": "KxQ(S#@>\"5=m$#58SgzD,+H+a73*pzKH,g5_"}
     
     if len(SECRET_CACHE) !=0:
         return SECRET_CACHE
