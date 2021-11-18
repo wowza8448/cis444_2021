@@ -30,5 +30,5 @@ def handle_request():
     if not user:
         return json_response(status_=401, message = 'Invalid credentials', authenticated =  False )
     
-    return json_response( token = create_token(user) , authenticated = False)
+    return json_response( token = create_token(user) , authenticated = True)
 
