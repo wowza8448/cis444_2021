@@ -1,11 +1,27 @@
 from flask import request, g
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 from tools.token_tools import create_token
+from db_con import get_db_instance, get_db
+import sys
+sys.path.append('..')
 
 from tools.logging import logger
+global_db_con = get_db()
 
 def handle_request():
     logger.debug("Get Books Handle Request")
-
-    return json_response( token = create_token(  g.jwt_data ) , books = {})
+    cur = global_db_con.cursor()
+    username = g.jwt_data['sub']
+    sqlExecute = "SELECT * from booksOwned WHERE username = username"
+    cur.execute(sqlExecute)
+    rows = cur.fetchall()
+    if rows == None:
+        return "You don't own any books"
+    else:
+        lst = []
+        print("books found for " + username)
+        for row in rows:
+            lst.append(row[1])
+        books = str(lst)
+    return json_response( token = create_token(  g.jwt_data ) , books = books)
 
