@@ -29,6 +29,7 @@
 						},
 	                                                function(err){ console.log(err) });
 			}
+							
 	                function buy_book(book_id){
 	                         //make secure call with the jwt
 	                        secure_get_with_token("/secure_api/get_books", {"book_id" : book_id} , function(data){console.log("got books"); console.log(data)}, 
@@ -43,7 +44,9 @@
 	  			for="password">Password:</label><br> <input type="password" id="password" name="password" value="12212"><br><br> <input type="submit" 
 	  			value="Login" onclick="return send_form();"> </form>
 	    	
-			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button> <button id="buybook" onclick="buy_book(1234)" 
+			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button> 
+		<div id="print_user_books" style="display:none">{{book_id}}</div>
+		<button id="buybook" onclick="buy_book(1234)" 
 		 style="display:none" >Buy
 		    Book</button> </body>
 	</html>

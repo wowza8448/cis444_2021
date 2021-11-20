@@ -23,10 +23,7 @@ def handle_request():
         hash = match[1].encode('utf-8')
         new = bcrypt.checkpw(bytes(password_from_user_form, 'utf-8'), hash)
         if new == True:
-            print("Valid login")
-            print(username)
             user = { "sub" : username } #sub is used by pyJwt as the owner of the token 
-            print(user)
         else:
             return json_response(status_=401, message = 'Invalid credentials', authenticated = False)
     if not user:

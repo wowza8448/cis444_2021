@@ -19,9 +19,9 @@ def handle_request():
         return "You don't own any books"
     else:
         lst = []
-        print("books found for " + username)
         for row in rows:
             lst.append(row[1])
-        books = str(lst)
-    return json_response( token = create_token(  g.jwt_data ) , books = books)
+        user_books = str(lst)
+        print(user_books)
+    return json_response( token = create_token(  g.jwt_data ) ,pass_back = user_books ,books = {})
 
