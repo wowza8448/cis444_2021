@@ -23,5 +23,5 @@ def handle_request():
             lst.append(row[1])
         user_books = str(lst)
         print(user_books)
-    return json_response( token = create_token(  g.jwt_data ) ,pass_back = user_books ,books = {})
+    return json_response( token = create_token(  g.jwt_data ) , pass_back = user_books ,books = {})
 

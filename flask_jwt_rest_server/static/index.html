@@ -15,6 +15,10 @@
 					});
 				return false;
 			}
+
+
+			function create_form() {$.post("/open_api/create_user", { "2firstname":$('#2fname').val(),"2password":$('#2password').val()})}
+
 			function signup_redirect(){ $('#login').hide(); $('#create_username').show(); $('#signup_create').hide(); $('#login_redirect').show();
 			}
       
@@ -23,7 +27,7 @@
 	
 			function get_books(){
 				 //make secure call with the jwt
-				secure_get_with_token("/secure_api/get_books", {} , function(data){ console.log("got books"); console.log(data); $('#login').hide(); 
+				secure_get_with_token("/secure_api/get_books", {} , function(data){ console.log("got books for user"); console.log(data); $('#login').hide(); 
           $('#create_username').hide(); $('#signup_create').hide();
 					$('#buybook').show();
 						},
@@ -39,7 +43,7 @@
 		</script> <div id="create_username" style="display:none"><form><lable for="2fname">First name:</label><br><input type="text" id="2fname" name="2fname" 
 		value=""><br>
 			<label for="2password">Password:</lable><br> <input type="password" id="new_password" name="password" value=""><br><br> <input type="submit" 
-				value="Create account" onclick="to be added"><p>or</p></div> <button id="login_redirect" style="display:none" onclick="login_show();">Login here</button>
+				value="Create account" onclick="return create_form();"><p>or</p></div> <button id="login_redirect" style="display:none" onclick="login_show();">Login here</button>
 		<div id="login"> <form > <label for="fname">First name:</label><br> <input type="text" id="fname" name="fname" value="John"><br> <label 
 	  			for="password">Password:</label><br> <input type="password" id="password" name="password" value="12212"><br><br> <input type="submit" 
 	  			value="Login" onclick="return send_form();"> </form>
