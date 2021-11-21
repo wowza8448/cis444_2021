@@ -42,17 +42,15 @@
 	                                                function(err){ console.log(err) });
 			}
 			
-function test(){$.post, secure_get_with_token("/secure_api/buy_books", {} , {'book_got':$('#horton').val()}, function(data) {	
-				
+function horton(){$.post, secure_get_with_token("/secure_api/buy_books", {}, function(data) {	
+				get_books();
 				console.log("horton got");	}
 )}
 
-	                function buy_horton(){
-				secure_get_with_token( $.post("/secure_api/buy_books", {'book_got':$('#horton').val()} , function(data){ $('#print_user_books').hide();
-						},
-	                                                function(err){ console.log(err) }));
-	                }
-
+function grinch(){$.post, secure_get_with_token("/secure_api/buy_grinch", {}, function(data) {
+		get_books();
+	console.log("grinch got");     }
+)}
 
 		</script> <div id="create_username" style="display:none"><form><lable for="2fname">First name:</label><br><input type="text" id="2fname" name="2fname" 
 		value=""><br>
@@ -65,8 +63,9 @@ function test(){$.post, secure_get_with_token("/secure_api/buy_books", {} , {'bo
 			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button> 
 		<div id="you_own" style="display:none"><p>You own these books:</p></div>
 		<div id="print_user_books" style="display:none"></div><br>
-		<input type="submit" onclick="return test();" value='Buy Horton Hears' name="horton" id="buyhorton" style="display:none">
+		<input type="submit" onclick="return horton();" value='Buy Horton Hears' name="horton" id="buyhorton" style="display:none">
 
+		<input type="submit" onclick="return grinch();" value='Buy The Grinch' name="grinch" id="buygrinch" style="display:none">
 			</form>	
 	     </body>
 	</html>
