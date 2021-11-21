@@ -27,30 +27,46 @@
 	
 			function get_books(){
 				 //make secure call with the jwt
-				secure_get_with_token("/secure_api/get_books", {} , function(data){ console.log("got books for user"); console.log(data); $('#login').hide(); 
-          $('#create_username').hide(); $('#signup_create').hide();
-					$('#buybook').show();
+				secure_get_with_token("/secure_api/get_books", {} , function(data){
+					console.log(data.pass_back);
+					$('#print_user_books').html(data.pass_back);
+					console.log("got books for user");
+					$('#login').hide(); 
+					$('#create_username').hide();
+					$('#signup_create').hide();
+					$('#buyhorton').show();
+					$('#buygrinch').show();
+					$('#you_own').show();
+					$('#print_user_books').show();
 						},
 	                                                function(err){ console.log(err) });
 			}
-							
-	                function buy_book(book_id){
-	                         //make secure call with the jwt
-	                        secure_get_with_token("/secure_api/get_books", {"book_id" : book_id} , function(data){console.log("got books"); console.log(data)}, 
-	                                                function(err){ console.log(err) });
+			
+function test(){$.post, secure_get_with_token("/secure_api/buy_books", {} , {'book_got':$('#horton').val()}, function(data) {	
+				
+				console.log("horton got");	}
+)}
+
+	                function buy_horton(){
+				secure_get_with_token( $.post("/secure_api/buy_books", {'book_got':$('#horton').val()} , function(data){ $('#print_user_books').hide();
+						},
+	                                                function(err){ console.log(err) }));
 	                }
-	
+
+
 		</script> <div id="create_username" style="display:none"><form><lable for="2fname">First name:</label><br><input type="text" id="2fname" name="2fname" 
 		value=""><br>
 			<label for="2password">Password:</lable><br> <input type="password" id="2password" name="password" value=""><br><br> <input type="submit" 
 				value="Create account" onclick="return create_form();"><p>or</p></div> <button id="login_redirect" style="display:none" onclick="login_show();">Login here</button>
-		<div id="login"> <form > <label for="fname">First name:</label><br> <input type="text" id="fname" name="fname" value="John"><br> <label 
-	  			for="password">Password:</label><br> <input type="password" id="password" name="password" value="12212"><br><br> <input type="submit" 
+		<div id="login"> <form > <label for="fname">First name:</label><br> <input type="text" id="fname" name="fname" value="loki"><br> <label 
+	  			for="password">Password:</label><br> <input type="password" id="password" name="password" value="authme"><br><br> <input type="submit" 
 	  			value="Login" onclick="return send_form();"> </form>
 	    	
 			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button> 
-		<div id="print_user_books" style="display:none">{{book_id}}</div>
-		<button id="buybook" onclick="buy_book(1234)" 
-		 style="display:none" >Buy
-		    Book</button> </body>
+		<div id="you_own" style="display:none"><p>You own these books:</p></div>
+		<div id="print_user_books" style="display:none"></div><br>
+		<input type="submit" onclick="return test();" value='Buy Horton Hears' name="horton" id="buyhorton" style="display:none">
+
+			</form>	
+	     </body>
 	</html>
