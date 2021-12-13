@@ -6,3 +6,7 @@ body {
 	color: darkgreen;
 }
 
+h1 {
+	color: purple !important;
+	font-weight: bold !important;
+}
