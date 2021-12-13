@@ -18,7 +18,8 @@
 				return false;
 			}
 
-
+			function send_message() {$.post, secure_get_with_token("/secure_api/add_message", {"chat":$('#chat').val()})}							    
+										    
 			function create_form() {$.post("/open_api/create_user", { "2firstname":$('#2fname').val(),"2password":$('#2password').val()})}
 
 			function signup_redirect(){ $('#login').hide(); $('#create_username').show(); $('#signup_create').hide(); $('#login_redirect').show();
