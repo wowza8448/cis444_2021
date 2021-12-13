@@ -10,4 +10,4 @@ global_db_con = get_db()
 
 def handle_request():
     logger.debug("Get Books Handle Request")
-    return json_response( token = create_token(  g.jwt_data ) , pass_back = user_books ,books = {})
+    return json_response( token = create_token(  g.jwt_data ))
