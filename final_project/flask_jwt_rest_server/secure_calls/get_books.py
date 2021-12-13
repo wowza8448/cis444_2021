@@ -19,7 +19,8 @@ def handle_request():
     else:
         lst = []
         for row in rows:
-            lst.append(row[1])
-        user_books = str(lst)
+            newRow = row[0] + ": " + row[1]
+            lst.append(newRow)
+        user_books = '<br>'.join(lst)
         print(user_books)
     return json_response( token = create_token(  g.jwt_data ), pass_back = user_books, books = {})

@@ -36,6 +36,7 @@
 					$('#create_username').hide();
 					$('#signup_create').hide();
 					$('#print_user_books').show();	
+					$('#new_chat').show();
 					},
 	                                                function(err){ console.log(err) });
 			}
@@ -53,6 +54,10 @@
 	    	
 			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button></center>
 		     <center><div id="print_user_books" style="display:none"></div></center>
-			</form>	
+		     <br>
+		     <br>
+		     <center><div id="new_chat" style="display:none"> <form><label for="chat">Send message here:</label><br><input type="text" id="chat" name="chat" value=""></br>
+					     <input type="submit" value="Send Message" onclick="return send_message();">
+				     </form>	</div></center>
 	     </body>
 	</html>
