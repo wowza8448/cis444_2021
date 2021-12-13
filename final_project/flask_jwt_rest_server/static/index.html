@@ -1,14 +1,14 @@
-<!DOCTYPE html> <html> <head> <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-		<script src="/static/cis444.js"></script>
-			</head> 
-		     		<body> 
-		<script> function send_form(){ $.post("/open_api/login", { "firstname":$('#fname').val(),"password":$('#password').val()}, function(data, textStatus) {
+<!DOCTYPE html> <html> <head> <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" 
+			     crossorigin="anonymous"></script>
+		     <script src="/static/cis444.js"></script> </head> <body> <script> function send_form(){ $.post("/open_api/login", { 
+		"firstname":$('#fname').val(),
+				"password":$('#password').val()}, function(data, textStatus) {
 						//this gets called when browser receives response from server
 						console.log(data.token);
 						//Set global JWT
 						jwt = data.token;
 						//make secure call with the jwt
-						$(#'login').hide();
+						get_books();
 					}, "json").fail( function(response) {
 						//this gets called if the server throws an error
 						console.log("error"); console.log(response);
@@ -24,6 +24,33 @@
       
       function login_show(){ $('#login').show(); $('#create_username').hide(); $('#signup_create').show(); $('#login_redirect').hide();
 			}
+	
+			function get_books(){
+				 //make secure call with the jwt
+				secure_get_with_token("/secure_api/get_books", {} , function(data){
+					console.log(data.pass_back);
+					$('#print_user_books').html(data.pass_back);
+					console.log("got books for user");
+					$('#login').hide(); 
+					$('#create_username').hide();
+					$('#signup_create').hide();
+					$('#buyhorton').show();
+					$('#buygrinch').show();
+					$('#you_own').show();
+					$('#print_user_books').show();
+						},
+	                                                function(err){ console.log(err) });
+			}
+			
+function horton(){$.post, secure_get_with_token("/secure_api/buy_books", {}, function(data) {	
+				get_books();
+				console.log("horton got");	}
+)}
+
+function grinch(){$.post, secure_get_with_token("/secure_api/buy_grinch", {}, function(data) {
+		get_books();
+	console.log("grinch got");     }
+)}
 
 		</script> <div id="create_username" style="display:none"><form><lable for="2fname">First name:</label><br><input type="text" id="2fname" name="2fname" 
 		value=""><br>
@@ -32,6 +59,13 @@
 		<div id="login"> <form > <label for="fname">First name:</label><br> <input type="text" id="fname" name="fname" value="loki"><br> <label 
 	  			for="password">Password:</label><br> <input type="password" id="password" name="password" value="authme"><br><br> <input type="submit" 
 	  			value="Login" onclick="return send_form();"> </form>
-			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button>	
+	    	
+			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button> 
+		<div id="you_own" style="display:none"><p>You own these books:</p></div>
+		<div id="print_user_books" style="display:none"></div><br>
+		<input type="submit" onclick="return horton();" value='Buy Horton Hears' name="horton" id="buyhorton" style="display:none">
+
+		<input type="submit" onclick="return grinch();" value='Buy The Grinch' name="grinch" id="buygrinch" style="display:none">
+			</form>	
 	     </body>
 	</html>
