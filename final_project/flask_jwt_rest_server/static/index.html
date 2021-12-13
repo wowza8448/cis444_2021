@@ -30,11 +30,13 @@
 			function get_books(){
 				 //make secure call with the jwt
 				secure_get_with_token("/secure_api/get_books", {} , function(data){
+					$('#print_user_books').html(data.pass_back);
 					console.log(data.pass_back);
 					$('#login').hide(); 
 					$('#create_username').hide();
 					$('#signup_create').hide();
-						},
+					$('#print_user_books').show();	
+					},
 	                                                function(err){ console.log(err) });
 			}
 			
@@ -50,6 +52,7 @@
 	  			value="Login" onclick="return send_form();"> </form>
 	    	
 			<p>or </p></div><button id="signup_create" onclick="signup_redirect();">Sign up here</button></center>
+		     <center><div id="print_user_books" style="display:none"></div></center>
 			</form>	
 	     </body>
 	</html>
