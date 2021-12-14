@@ -18,7 +18,8 @@
 				return false;
 			}
 
-			function send_message() {$.post, secure_get_with_token("/secure_api/add_message", {"chat":$('#chat').val()})}							    
+
+			function send_message(){$.post, secure_get_with_token("/secure_api/add_message", { "chat":$('#chat').val()})}					    
 										    
 			function create_form() {$.post("/open_api/create_user", { "2firstname":$('#2fname').val(),"2password":$('#2password').val()})}
 
@@ -41,7 +42,7 @@
 					},
 	                                                function(err){ console.log(err) });
 			}
-			
+			setInterval('get_books()', 1000);
 
 		     </script>
 		     <center><h1>Global Chat Application</h1></center>
@@ -57,8 +58,8 @@
 		     <center><div id="print_user_books" style="display:none"></div></center>
 		     <br>
 		     <br>
-		     <center><div id="new_chat" style="display:none"> <form><label for="chat">Send message here:</label><br><input type="text" id="chat" name="chat" value=""></br>
+		     <center><div id="new_chat" style="display:none"><label for="chat">Send message here:</label><br><input type="text" id="chat" name="chat" value=""></br>
 					     <input type="submit" value="Send Message" onclick="return send_message();">
-				     </form>	</div></center>
+			     </div></center>
 	     </body>
 	</html>

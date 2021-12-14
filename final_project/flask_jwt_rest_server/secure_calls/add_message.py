@@ -11,16 +11,8 @@ global_db_con = get_db()
 def handle_request():
     cur = global_db_con.cursor()
     username = g.jwt_data['sub']
-    sqlExecute = "SELECT * from userchats"
-    cur.execute(sqlExecute)
-    rows = cur.fetchall()
-    if rows == None:
-        return "Chat is empty"
-    else:
-        lst = []
-        for row in rows:
-            newRow = row[0] + ": " + row[1]
-            lst.append(newRow)
-        user_books = '<br>'.join(lst)
-        print(user_books)
-    return json_response( token = create_token(  g.jwt_data ), pass_back = user_books, books = {})
+    message = request.args.get("chat")
+    sqlInsert = """INSERT INTO userchats(username, chat) values(%s, %s);"""
+    cur.execute(sqlInsert, (username, message))
+    global_db_con.commit()
+    return json_response()
